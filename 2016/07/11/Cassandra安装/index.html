@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Cassandra安装 | I am Turtle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="最近项目中有用到ca，所有决定开始学学，这次是在虚拟机下安装个单机版本，做个记录。 下载安装包wget http://mirrors.cnnic.cn/apache/cassandra/3.7/apache-cassandra-3.7-bin.tar.gz tar -zxvf apache-cassandra-3.7-bin.tar.gz -C /usr/cassandra-3.7 创建需要的目录">
+<meta name="keywords" content="Cassandra">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cassandra安装">
+<meta property="og:url" content="http://www.newblash.me/2016/07/11/Cassandra安装/index.html">
+<meta property="og:site_name" content="I am Turtle">
+<meta property="og:description" content="最近项目中有用到ca，所有决定开始学学，这次是在虚拟机下安装个单机版本，做个记录。 下载安装包wget http://mirrors.cnnic.cn/apache/cassandra/3.7/apache-cassandra-3.7-bin.tar.gz tar -zxvf apache-cassandra-3.7-bin.tar.gz -C /usr/cassandra-3.7 创建需要的目录">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2016-07-16T07:30:51.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Cassandra安装">
+<meta name="twitter:description" content="最近项目中有用到ca，所有决定开始学学，这次是在虚拟机下安装个单机版本，做个记录。 下载安装包wget http://mirrors.cnnic.cn/apache/cassandra/3.7/apache-cassandra-3.7-bin.tar.gz tar -zxvf apache-cassandra-3.7-bin.tar.gz -C /usr/cassandra-3.7 创建需要的目录">
+  
+    <link rel="alternative" href="/atom.xml" title="I am Turtle" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/img/favicon.png">
+  
+  
+      <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  
+      <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+  <!-- 加载特效 -->
+    <script src="/js/pace.js"></script>
+    <link href="/css/pace/pace-theme-flash.css" rel="stylesheet" />
+  <script>
+      var yiliaConfig = {
+          rootUrl: '/',
+          fancybox: true,
+          animate: true,
+          isHome: false,
+          isPost: true,
+          isArchive: false,
+          isTag: false,
+          isCategory: false,
+          open_in_new: false
+      }
+  </script>
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            
+            <img lazy-src="/img/head.png" class="js-avatar">
+            
+        </a>
+
+        <hgroup>
+          <h1 class="header-author"><a href="/" title="Hi Mate">Turtle</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">别让等待，成为遗憾</p>
+        
+        
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/Home">博客首页</a></li>
+                        
+                            <li><a href="/works">作品展示</a></li>
+                        
+                            <li><a href="/about">留言打卡</a></li>
+                        
+                            <li><a href="/FrontEndGuide">前端导航</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fl github" target="_blank" href="https://github.com/Turtle1991" title="github">github</a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <a href="/tags/Cassandra/" style="font-size: 10px;">Cassandra</a> <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/js/" style="font-size: 10px;">js</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/tags/php/" style="font-size: 10px;">php</a> <a href="/tags/配环境/" style="font-size: 20px;">配环境</a>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="http://luuman.github.io/">name</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">爱编程，php，喜欢动漫</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="Me">Turtle</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                
+                    <img lazy-src="/img/head.png" class="js-avatar">
+                
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="Me">Turtle</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">别让等待，成为遗憾</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/Home">博客首页</a></li>
+                
+                    <li><a href="/works">作品展示</a></li>
+                
+                    <li><a href="/about">留言打卡</a></li>
+                
+                    <li><a href="/FrontEndGuide">前端导航</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a class="github" target="_blank" href="https://github.com/Turtle1991" title="github">github</a>
+                    
+                </div>
+            </nav>
+        </header>                
+    </div>
+</nav>
+      <div class="body-wrap"><article id="post-Cassandra安装" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/07/11/Cassandra安装/" class="article-date">
+      <time datetime="2016-07-11T15:02:15.000Z" itemprop="datePublished">2016-07-11</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Cassandra安装
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Cassandra/">Cassandra</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>最近项目中有用到ca，所有决定开始学学，这次是在虚拟机下安装个单机版本，做个记录。</p>
+<h1 id="下载安装包"><a href="#下载安装包" class="headerlink" title="下载安装包"></a>下载安装包</h1><pre><code>wget http://mirrors.cnnic.cn/apache/cassandra/3.7/apache-cassandra-3.7-bin.tar.gz
+tar -zxvf apache-cassandra-3.7-bin.tar.gz -C /usr/cassandra-3.7
+</code></pre><h1 id="创建需要的目录"><a href="#创建需要的目录" class="headerlink" title="创建需要的目录"></a>创建需要的目录</h1><pre><code>cd /usr/cassandra-3.7
+data/commitlog、data/data、data/saved_caches、logs
+</code></pre><h1 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h1><pre><code>[root@newBlash log]# cassandra -f -R //用 -R 选项，因为默认不建议使用root用户来启动
+</code></pre><a id="more"></a>
+<h1 id="运行-cqlsh"><a href="#运行-cqlsh" class="headerlink" title="运行 cqlsh"></a>运行 cqlsh</h1><p>需要 python2.7，centos 升级 python2.6 到 2.7，之前有安装过2.7版本，所以直接</p>
+<pre><code>mv /usr/bin/python /usr/bin/python_old //备份旧的 2.6版本
+cp /usr/local/python2.7/bin/python2.7 /usr/bin/python //复制新的 2.7版本
+
+检查： python -V //提示 2.7
+</code></pre><p>修改 yum，因为只支持 2.6版本</p>
+<pre><code>vim /usr/bin/yum
+
+ #!/usr/bin/python2.6 //指明是用2.6版本的python
+</code></pre><p>到这里就替换成功，目前没有发现问题。</p>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><p>1.Cassandra官网的start：<a href="http://wiki.apache.org/cassandra/GettingStarted" target="_blank" rel="external">http://wiki.apache.org/cassandra/GettingStarted</a></p>
+<p>2.Cassandra的配置文件cassandra.yaml部分参数说明：</p>
+<pre><code>默认集群名（cluster_name）：Test Cluster
+默认缓存文件存放路径（saved_caches_directory）：$CASSANDRA_HOME/data/saved_caches
+默认数据文件存放路径（data_file_directories）：$CASSANDRA_HOME/data/data
+默认commitlog存放路径（commitlog_directory）：$CASSANDRA_HOME/data/commitlog
+默认的Cassandra服务地址（rpc_address）：localhost
+默认的Cassandra服务端口（rpc_port）：9160
+默认的CQL本地服务端口（native_transport_port）： 9042
+</code></pre><p>3.参考：<br><a href="[http://blog.csdn.net/a19881029/article/details/40630529]">Cassandra单节点安装</a><br><a href="[http://my.oschina.net/moks/blog/513000]">Cassandra linux下安装</a></p>
+
+      
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2016/07/11/Cassandra安装/">Cassandra安装</a></p>
+        <p><span>文章作者:</span><a href="/" title="访问 Turtle 的个人博客">Turtle</a></p>
+        <p><span>发布时间:</span>2016年07月11日 - 23时02分</p>
+        <p><span>最后更新:</span>2016年07月16日 - 15时30分</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2016/07/11/Cassandra安装/" title="Cassandra安装">http://www.newblash.me/2016/07/11/Cassandra安装/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://www.newblash.me/2016/07/11/Cassandra安装/　　作者: Turtle" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script src="/js/clipboard.min.js"></script>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" title="中国大陆 (CC BY-NC-SA 3.0 CN)" target = "_blank">"署名-非商用-相同方式共享 3.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+<nav id="article-nav">
+  
+  
+    <a href="/2016/04/17/mac下php开发环境搭建/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">mac下php开发环境搭建</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#下载安装包"><span class="toc-number">1.</span> <span class="toc-text">下载安装包</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#创建需要的目录"><span class="toc-number">2.</span> <span class="toc-text">创建需要的目录</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#启动"><span class="toc-number">3.</span> <span class="toc-text">启动</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#运行-cqlsh"><span class="toc-number">4.</span> <span class="toc-text">运行 cqlsh</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#其他"><span class="toc-number">5.</span> <span class="toc-text">其他</span></a></li></ol>
+</div>
+<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script>
+    var valueHide = "隐藏目录";
+    var valueShow = "显示目录";
+
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+        }
+    })
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+    }
+</script>
+
+
+
+
+
+
+
+    
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+        
+            <a href="/2016/04/17/mac下php开发环境搭建/" title="下一篇: mac下php开发环境搭建">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2016/07/11/Cassandra安装/">Cassandra安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/17/mac下php开发环境搭建/">mac下php开发环境搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/25/js收获小笔记/">js收获小笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/08/mysql的一些常用语句/">mysql的一些常用语句</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/07/mysql的create-table-as-与-like-的区别/">mysql的create table as 与 like 的区别</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/07/LAMP环境搭建-php安装/">[LAMP环境搭建] php安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/07/LAMP环境搭建-MySQL安装/">[LAMP环境搭建] MySQL安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/01/27/LAMP环境搭建-Apache安装/">[LAMP环境搭建] Apache安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/01/23/开篇/">开篇</a></li></ul>
+    <script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+    <script>
+        $(".post-list").addClass("toc-article");
+        $(".post-list-item a").attr("target","_blank");
+        $("#post-nav-button > a:nth-child(2)").click(function() {
+            $(".fa-bars, .fa-times").toggle();
+            $(".post-list").toggle(300);
+            if ($(".toc").length > 0) {
+                $("#toc, #tocButton").toggle(200, function() {
+                    if ($(".switch-area").is(":visible")) {
+                        $("#tocButton").attr("value", valueHide);
+                        }
+                    })
+            }
+            else {
+            }
+        })
+    </script>
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                &copy; 2017 Turtle
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/luuman/hexo-theme-spfk" target="_blank">spfk</a> by luuman
+            </div>
+        </div>
+        
+    </div>
+</footer>
+
+    </div>
+    <script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var backgroundnum = 24;
+            var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+            $("#mobile-nav").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+            $(".left-col").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    $(document).ready(function() {
+        if ($("#comments").length < 1) {
+            $("#scroll > a:nth-child(2)").hide();
+        };
+    })
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+  <script language="javascript">
+    $(function() {
+        $("a[title]").each(function() {
+            var a = $(this);
+            var title = a.attr('title');
+            if (title == undefined || title == "") return;
+            a.data('title', title).removeAttr('title').hover(
+
+            function() {
+                var offset = a.offset();
+                $("<div id=\"anchortitlecontainer\"></div>").appendTo($("body")).html(title).css({
+                    top: offset.top - a.outerHeight() - 15,
+                    left: offset.left + a.outerWidth()/2 + 1
+                }).fadeIn(function() {
+                    var pop = $(this);
+                    setTimeout(function() {
+                        pop.remove();
+                    }, pop.text().length * 800);
+                });
+            }, function() {
+                $("#anchortitlecontainer").remove();
+            });
+        });
+    });
+</script>
+
+
+  </div>
+</body>
+</html>
