@@ -287,7 +287,7 @@
     <strong class="toc-title">文章目录</strong>
     
 </div>
-<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+<!--<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">-->
 
 <script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
 <script>
@@ -322,36 +322,60 @@
 
 
 
-    <div class="scroll" id="post-nav-button">
-        
-            <a href="/2016/01/27/LAMP环境搭建-Apache安装/" title="上一篇: [LAMP环境搭建] Apache安装">
-                <i class="fa fa-angle-left"></i>
-            </a>
-        
-        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
-        
-            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
-        
-    </div>
-    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2016/07/11/Cassandra安装/">Cassandra安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/17/mac下php开发环境搭建/">mac下php开发环境搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/25/js收获小笔记/">js收获小笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/08/mysql的一些常用语句/">mysql的一些常用语句</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/07/mysql的create-table-as-与-like-的区别/">mysql的create table as 与 like 的区别</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/07/LAMP环境搭建-php安装/">[LAMP环境搭建] php安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/07/LAMP环境搭建-MySQL安装/">[LAMP环境搭建] MySQL安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/01/27/LAMP环境搭建-Apache安装/">[LAMP环境搭建] Apache安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/01/23/开篇/">开篇</a></li></ul>
-    <script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
-    <script>
-        $(".post-list").addClass("toc-article");
-        $(".post-list-item a").attr("target","_blank");
-        $("#post-nav-button > a:nth-child(2)").click(function() {
+<div class="scroll" id="post-nav-button">
+    
+    <a href="/2016/01/27/LAMP环境搭建-Apache安装/" title="上一篇: [LAMP环境搭建] Apache安装">
+        <i class="fa fa-angle-left"></i>
+    </a>
+    
+    <a title="文章目录"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+    
+    <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+    
+</div>
+<ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2016/07/11/Cassandra安装/">Cassandra安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/17/mac下php开发环境搭建/">mac下php开发环境搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/25/js收获小笔记/">js收获小笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/08/mysql的一些常用语句/">mysql的一些常用语句</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/07/mysql的create-table-as-与-like-的区别/">mysql的create table as 与 like 的区别</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/07/LAMP环境搭建-php安装/">[LAMP环境搭建] php安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/07/LAMP环境搭建-MySQL安装/">[LAMP环境搭建] MySQL安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/01/27/LAMP环境搭建-Apache安装/">[LAMP环境搭建] Apache安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/01/23/开篇/">开篇</a></li></ul>
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script>
+    $(".post-list").addClass("toc-article");
+    $(".post-list-item a").attr("target", "_blank");
+    $("#post-nav-button > a:nth-child(2)").click(function () {
+
+        if ($(".toc").length < 1) {
+            //无目录
+
+        } else {
+            //有目录
             $(".fa-bars, .fa-times").toggle();
-            $(".post-list").toggle(300);
-            if ($(".toc").length > 0) {
-                $("#toc, #tocButton").toggle(200, function() {
-                    if ($(".switch-area").is(":visible")) {
-                        $("#tocButton").attr("value", valueHide);
-                        }
-                    })
+            if ($("#toc").is(":hidden")) {
+                //显示
+                $("#tocButton").attr("value", valueHide);
+                $("#toc").slideDown(320);
+            } else {
+                //隐藏
+                $("#tocButton").attr("value", valueShow);
+                $("#toc").slideUp(350);
             }
-            else {
-            }
-        })
-    </script>
+        }
+
+//        $(".fa-bars, .fa-times").toggle();
+//        $(".post-list").toggle(300);
+//        if ($(".toc").length > 0) {
+//            $("#toc, #tocButton").toggle(200, function () {
+//                if ($(".switch-area").is(":visible")) {
+//                    $("#tocButton").attr("value", valueHide);
+//                }
+//            })
+//        }
+//        else {
+//        }
+    })
+
+    $(document).ready(function () {
+        if ($("#toc").is(":hidden") === false) {
+            $(".fa-bars, .fa-times").toggle();
+        }
+    });
+</script>
 
 
 
