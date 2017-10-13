@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="I am Turtle">
 <meta property="og:description" content="无意中在网上看到一个问题：如何求2的10w次方？ 这个值很大很大，普通运算是放不下的。所以看了网上大家的回答，其中有人提到了高精度运算，于是搜索了下，大致意思就是：对于很大的数，可以通过定义一个数组来存放数的每个位的值，这样结果以字符串形式输出，也就不会有溢出问题了。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-10-13T03:08:56.000Z">
+<meta property="og:updated_time" content="2017-10-13T06:41:40.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="高精度运算学习">
 <meta name="twitter:description" content="无意中在网上看到一个问题：如何求2的10w次方？ 这个值很大很大，普通运算是放不下的。所以看了网上大家的回答，其中有人提到了高精度运算，于是搜索了下，大致意思就是：对于很大的数，可以通过定义一个数组来存放数的每个位的值，这样结果以字符串形式输出，也就不会有溢出问题了。">
@@ -230,6 +230,7 @@
 <p>所以这里就可以计算开头所说的2的10w次方了</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$precision = <span class="keyword">new</span> precision();</div><div class="line">$ts = time();</div><div class="line">var_dump($precision::hightPower(<span class="number">2</span>, <span class="number">10</span>));</div><div class="line">var_dump(time() - $ts);</div><div class="line"></div><div class="line">结果挺大，共<span class="number">30103</span>位，这里耗时大概<span class="number">1043</span>s，效率应该还可以提高。</div></pre></td></tr></table></figure>
 <p>ps：看有人说到用java的大数库去求这个结果，速度快很多。这里主要为的是学习高精度运算的方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> java.math.BigInteger;</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">A</span> </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">            String s = <span class="keyword">new</span> BigInteger(<span class="string">"2"</span>).pow(<span class="number">100000</span>).toString();</div><div class="line">            System.out.println(s);</div><div class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>想法：感觉这里和之前看到的位图挺像的，都是采用到了大数组来表示大范围的值。</p>
 <hr>
 <p>参考：</p>
@@ -247,7 +248,7 @@
         <p><span>本文标题:</span><a href="/2017/10/13/高精度运算学习/">高精度运算学习</a></p>
         <p><span>文章作者:</span><a href="/" title="访问 Turtle 的个人博客">Turtle</a></p>
         <p><span>发布时间:</span>2017年10月13日 - 09时47分</p>
-        <p><span>最后更新:</span>2017年10月13日 - 11时08分</p>
+        <p><span>最后更新:</span>2017年10月13日 - 14时41分</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2017/10/13/高精度运算学习/" title="高精度运算学习">http://www.newblash.me/2017/10/13/高精度运算学习/</a>
             <span class="copy-path" data-clipboard-text="原文: http://www.newblash.me/2017/10/13/高精度运算学习/　　作者: Turtle" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
