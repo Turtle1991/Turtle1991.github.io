@@ -3,20 +3,20 @@
 <head>
   <meta charset="utf-8">
   
-  <title>mysql的一些常用语句 | I am Turtle</title>
+  <title>mysql加了索引就一定会用到吗？ | I am Turtle</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="查看支持的引擎show engines\G; 查看字符集情况">
+  <meta name="description" content="最近在修复大量的历史数据，所以决定根据现有的业务逻辑把数据表重新调整，该加索引的加索引，多余的没有字段去除掉，节省空间。数据修复完后，想着现在查询应该会比以前快吧，结果搜索，查询非常久，前端由于查询太长直接返回504。打开慢查询日志，看到了所用的查询语句，很纳闷，把慢查询日志中的查询语句放到mysql中explain了下，很惊讶的发现">
 <meta name="keywords" content="mysql">
 <meta property="og:type" content="article">
-<meta property="og:title" content="mysql的一些常用语句">
-<meta property="og:url" content="http://www.newblash.me/2016/02/08/mysql的一些常用语句/index.html">
+<meta property="og:title" content="mysql加了索引就一定会用到吗？">
+<meta property="og:url" content="http://www.newblash.me/2017/11/30/mysql加了索引就一定会用到吗？/index.html">
 <meta property="og:site_name" content="I am Turtle">
-<meta property="og:description" content="查看支持的引擎show engines\G; 查看字符集情况">
+<meta property="og:description" content="最近在修复大量的历史数据，所以决定根据现有的业务逻辑把数据表重新调整，该加索引的加索引，多余的没有字段去除掉，节省空间。数据修复完后，想着现在查询应该会比以前快吧，结果搜索，查询非常久，前端由于查询太长直接返回504。打开慢查询日志，看到了所用的查询语句，很纳闷，把慢查询日志中的查询语句放到mysql中explain了下，很惊讶的发现">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2016-02-25T15:57:48.000Z">
+<meta property="og:updated_time" content="2017-11-30T09:44:14.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="mysql的一些常用语句">
-<meta name="twitter:description" content="查看支持的引擎show engines\G; 查看字符集情况">
+<meta name="twitter:title" content="mysql加了索引就一定会用到吗？">
+<meta name="twitter:description" content="最近在修复大量的历史数据，所以决定根据现有的业务逻辑把数据表重新调整，该加索引的加索引，多余的没有字段去除掉，节省空间。数据修复完后，想着现在查询应该会比以前快吧，结果搜索，查询非常久，前端由于查询太长直接返回504。打开慢查询日志，看到了所用的查询语句，很纳闷，把慢查询日志中的查询语句放到mysql中explain了下，很惊讶的发现">
   
   
     <link rel="icon" href="/img/favicon.png">
@@ -181,11 +181,11 @@
         </header>                
     </div>
 </nav>
-      <div class="body-wrap"><article id="post-mysql的一些常用语句" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-mysql加了索引就一定会用到吗？" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/02/08/mysql的一些常用语句/" class="article-date">
-      <time datetime="2016-02-08T14:58:28.000Z" itemprop="datePublished">2016-02-08</time>
+      <a href="/2017/11/30/mysql加了索引就一定会用到吗？/" class="article-date">
+      <time datetime="2017-11-30T08:51:55.000Z" itemprop="datePublished">2017-11-30</time>
 </a>
     </div>
   
@@ -198,7 +198,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      mysql的一些常用语句
+      mysql加了索引就一定会用到吗？
     </h1>
   
 
@@ -223,22 +223,26 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h1 id="查看支持的引擎"><a href="#查看支持的引擎" class="headerlink" title="查看支持的引擎"></a>查看支持的引擎</h1><pre><code>show engines\G;
-</code></pre><h1 id="查看字符集情况"><a href="#查看字符集情况" class="headerlink" title="查看字符集情况"></a>查看字符集情况</h1><a id="more"></a>
-<pre><code>show variables like &apos;character%’;
+        <p>最近在修复大量的历史数据，所以决定根据现有的业务逻辑把数据表重新调整，该加索引的加索引，多余的没有字段去除掉，节省空间。数据修复完后，想着现在查询应该会比以前快吧，结果搜索，查询非常久，前端由于查询太长直接返回504。打开慢查询日志，看到了所用的查询语句，很纳闷，把慢查询日志中的查询语句放到mysql中explain了下，很惊讶的发现<a id="more"></a>索引一个都没有用到。</p>
+<p>在这里我的index1索引是这样的 index1 (dateline, word),</p>
+<p>查询语句是:</p>
+<p>select * from test_table where dateline &gt;= xxx and dateline &lt; xxx;</p>
+<p>讲道理该会用到index1索引才对。</p>
+<p>通过网上查资料，大概是说:</p>
+<blockquote>
+<p>1.mysql觉得你这个查询没有必要用到索引，用和不用没什么区别，就没有用；</p>
+<p>2.mysql有时候也不是那么智能，可以通过<code>FORCE INDEX</code>来强制使用某一个索引</p>
+<p>you also can specify index you prefer, e.g. using force index keyword</p>
+<p>3.表的数据量很大很可能出现这种情况，前期不会出现，后面数据量上来后可能会出现不用索引的情况</p>
+<p>4.表数据很少，mysql认为全表扫描的话效率也可以，所以没用索引</p>
+</blockquote>
+<p>所以我采用FORCE INDEX的方法，查询语句改为:</p>
+<p>SELECT * FROM test_table FORCE INDEX (index1) WHERE dateline &gt;= xxx and dateline &lt; xxx;</p>
+<p>再用explain分析，这下就有用到我们指定的索引index1了。重新页面查询，虽然慢了点（数据太多了），但也不至于出现504，效果还是比优化之前好。</p>
+<p>收获：</p>
+<p>1.知道了数据表加索引也不一定就一定会生效，对于查询慢的地方，最好通过慢查询日志看看，必要时候使用explain分析查询语句是否真的有用到索引。</p>
+<p>2.知道了<code>FORCE INDEX</code></p>
 
-| Variable_name            | Value                                                          |
-+--------------------------------------------------------+
-| character_set_client     | utf8                                                           |
-| character_set_connection | utf8                                                           |
-| character_set_database   | utf8                                                           |
-| character_set_filesystem | binary                                                         |
-| character_set_results    | utf8                                                           |
-| character_set_server     | utf8                                                           |
-| character_set_system     | utf8                                                           |
-| character_sets_dir       | /usr/local/mysql-5.7.10-osx10.9-x86_64/share/charsets/ |
-+--------------------------------------------------------+
-</code></pre>
       
       
     </div>
@@ -247,13 +251,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2016/02/08/mysql的一些常用语句/">mysql的一些常用语句</a></p>
+        <p><span>本文标题:</span><a href="/2017/11/30/mysql加了索引就一定会用到吗？/">mysql加了索引就一定会用到吗？</a></p>
         <p><span>文章作者:</span><a href="/" title="访问 Turtle 的个人博客">Turtle</a></p>
-        <p><span>发布时间:</span>2016年02月08日 - 22时58分</p>
-        <p><span>最后更新:</span>2016年02月25日 - 23时57分</p>
+        <p><span>发布时间:</span>2017年11月30日 - 16时51分</p>
+        <p><span>最后更新:</span>2017年11月30日 - 17时44分</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2016/02/08/mysql的一些常用语句/" title="mysql的一些常用语句">http://www.newblash.me/2016/02/08/mysql的一些常用语句/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://www.newblash.me/2016/02/08/mysql的一些常用语句/　　作者: Turtle" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2017/11/30/mysql加了索引就一定会用到吗？/" title="mysql加了索引就一定会用到吗？">http://www.newblash.me/2017/11/30/mysql加了索引就一定会用到吗？/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://www.newblash.me/2017/11/30/mysql加了索引就一定会用到吗？/　　作者: Turtle" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script src="/js/clipboard.min.js"></script>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
@@ -266,18 +270,9 @@
 
 <nav id="article-nav">
   
-    <a href="/2016/02/25/js收获小笔记/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          js收获小笔记
-        
-      </div>
-    </a>
   
-  
-    <a href="/2016/02/07/mysql的create-table-as-与-like-的区别/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">mysql的create table as 与 like 的区别</div>
+    <a href="/2017/10/13/高精度运算学习/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">高精度运算学习</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -288,7 +283,7 @@
 
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#查看支持的引擎"><span class="toc-number">1.</span> <span class="toc-text">查看支持的引擎</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#查看字符集情况"><span class="toc-number">2.</span> <span class="toc-text">查看字符集情况</span></a></li></ol>
+    
 </div>
 <!--<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">-->
 
@@ -327,13 +322,11 @@
 
 <div class="scroll" id="post-nav-button">
     
-    <a href="/2016/02/25/js收获小笔记/" title="上一篇: js收获小笔记">
-        <i class="fa fa-angle-left"></i>
-    </a>
+    <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
     
     <a title="文章目录"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
     
-    <a href="/2016/02/07/mysql的create-table-as-与-like-的区别/" title="下一篇: mysql的create table as 与 like 的区别">
+    <a href="/2017/10/13/高精度运算学习/" title="下一篇: 高精度运算学习">
         <i class="fa fa-angle-right"></i>
     </a>
     
