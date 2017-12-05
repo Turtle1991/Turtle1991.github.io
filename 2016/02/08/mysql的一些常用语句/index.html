@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="I am Turtle">
 <meta property="og:description" content="查看支持的引擎show engines\G; 查看字符集情况">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2016-02-25T15:57:48.000Z">
+<meta property="og:updated_time" content="2017-12-05T08:24:54.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysql的一些常用语句">
 <meta name="twitter:description" content="查看支持的引擎show engines\G; 查看字符集情况">
@@ -238,7 +238,17 @@
 | character_set_system     | utf8                                                           |
 | character_sets_dir       | /usr/local/mysql-5.7.10-osx10.9-x86_64/share/charsets/ |
 +--------------------------------------------------------+
-</code></pre>
+</code></pre><h1 id="查看警告"><a href="#查看警告" class="headerlink" title="查看警告"></a>查看警告</h1><p>起因：在做一个查询，查询不到数据，但是从导入的数据源文件中却可以找到该记录，确认不是数据源丢失。</p>
+<p>再看mysql中的查询，返回结果边上还多了提示 1 row in set, 2 warnings (0.00 sec)；于是百度如何查看warnings，得知可以使用命令<code>show warings;</code></p>
+<pre><code>mysql&gt; show warnings;
++---------+------+-----------------------------------------------+
+| Level   | Code | Message                                       |
++---------+------+-----------------------------------------------+
+| Warning | 1264 | Out of range value for column &apos;uidB&apos; at row 1 |
+| Warning | 1264 | Out of range value for column &apos;uidA&apos; at row 1 |
++---------+------+-----------------------------------------------+
+</code></pre><p>这样就知道是字段超出范围了，修改字段，重新导入数据，问题解决。</p>
+
       
       
     </div>
@@ -250,7 +260,7 @@
         <p><span>本文标题:</span><a href="/2016/02/08/mysql的一些常用语句/">mysql的一些常用语句</a></p>
         <p><span>文章作者:</span><a href="/" title="访问 Turtle 的个人博客">Turtle</a></p>
         <p><span>发布时间:</span>2016年02月08日 - 22时58分</p>
-        <p><span>最后更新:</span>2016年02月25日 - 23时57分</p>
+        <p><span>最后更新:</span>2017年12月05日 - 16时24分</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2016/02/08/mysql的一些常用语句/" title="mysql的一些常用语句">http://www.newblash.me/2016/02/08/mysql的一些常用语句/</a>
             <span class="copy-path" data-clipboard-text="原文: http://www.newblash.me/2016/02/08/mysql的一些常用语句/　　作者: Turtle" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
@@ -288,7 +298,7 @@
 
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#查看支持的引擎"><span class="toc-number">1.</span> <span class="toc-text">查看支持的引擎</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#查看字符集情况"><span class="toc-number">2.</span> <span class="toc-text">查看字符集情况</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#查看支持的引擎"><span class="toc-number">1.</span> <span class="toc-text">查看支持的引擎</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#查看字符集情况"><span class="toc-number">2.</span> <span class="toc-text">查看字符集情况</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#查看警告"><span class="toc-number">3.</span> <span class="toc-text">查看警告</span></a></li></ol>
 </div>
 <!--<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">-->
 
