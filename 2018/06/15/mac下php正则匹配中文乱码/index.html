@@ -3,20 +3,20 @@
 <head>
   <meta charset="utf-8">
   
-  <title>mysql的create table as 与 like 的区别 | I am Turtle</title>
+  <title>mac下php正则匹配中文乱码 | I am Turtle</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="对于mysql的复制相同表结构方法，有create table as 和create table like 两种，区别是什么呢？ as create table t2 as select * from t1 where 1=2; 或者 limit 0;  as 创建出来的t2表（新表）缺少t1表（源表）的索引信息，只有表结构相同，没有索引，但包含源表的数据。">
-<meta name="keywords" content="mysql">
+  <meta name="description" content="这个问题遇到了两次，最近一次是一个页面在返回数据的时候json_encode()返回false，但是测试环境又是正常的，只有本地出现，猜想是否是数据中有乱码出现导致，在本地把数据打印出来，发现数据中有部分中文出现了乱码，此时猜测是不是数据库数据编码和本地不一致？但是检查后发现，数据库、本地代码都是UTF-8编码。排除数据源问题，那估计就是在数据处理过程中哪里出现问题，往前一步步调试，最后发现在一个">
+<meta name="keywords" content="php">
 <meta property="og:type" content="article">
-<meta property="og:title" content="mysql的create table as 与 like 的区别">
-<meta property="og:url" content="http://www.newblash.me/2016/02/07/mysql的create-table-as-与-like-的区别/index.html">
+<meta property="og:title" content="mac下php正则匹配中文乱码">
+<meta property="og:url" content="http://www.newblash.me/2018/06/15/mac下php正则匹配中文乱码/index.html">
 <meta property="og:site_name" content="I am Turtle">
-<meta property="og:description" content="对于mysql的复制相同表结构方法，有create table as 和create table like 两种，区别是什么呢？ as create table t2 as select * from t1 where 1=2; 或者 limit 0;  as 创建出来的t2表（新表）缺少t1表（源表）的索引信息，只有表结构相同，没有索引，但包含源表的数据。">
+<meta property="og:description" content="这个问题遇到了两次，最近一次是一个页面在返回数据的时候json_encode()返回false，但是测试环境又是正常的，只有本地出现，猜想是否是数据中有乱码出现导致，在本地把数据打印出来，发现数据中有部分中文出现了乱码，此时猜测是不是数据库数据编码和本地不一致？但是检查后发现，数据库、本地代码都是UTF-8编码。排除数据源问题，那估计就是在数据处理过程中哪里出现问题，往前一步步调试，最后发现在一个">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2016-02-25T15:57:57.000Z">
+<meta property="og:updated_time" content="2018-06-15T03:09:11.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="mysql的create table as 与 like 的区别">
-<meta name="twitter:description" content="对于mysql的复制相同表结构方法，有create table as 和create table like 两种，区别是什么呢？ as create table t2 as select * from t1 where 1=2; 或者 limit 0;  as 创建出来的t2表（新表）缺少t1表（源表）的索引信息，只有表结构相同，没有索引，但包含源表的数据。">
+<meta name="twitter:title" content="mac下php正则匹配中文乱码">
+<meta name="twitter:description" content="这个问题遇到了两次，最近一次是一个页面在返回数据的时候json_encode()返回false，但是测试环境又是正常的，只有本地出现，猜想是否是数据中有乱码出现导致，在本地把数据打印出来，发现数据中有部分中文出现了乱码，此时猜测是不是数据库数据编码和本地不一致？但是检查后发现，数据库、本地代码都是UTF-8编码。排除数据源问题，那估计就是在数据处理过程中哪里出现问题，往前一步步调试，最后发现在一个">
   
   
     <link rel="icon" href="/img/favicon.png">
@@ -181,11 +181,11 @@
         </header>                
     </div>
 </nav>
-      <div class="body-wrap"><article id="post-mysql的create-table-as-与-like-的区别" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-mac下php正则匹配中文乱码" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/02/07/mysql的create-table-as-与-like-的区别/" class="article-date">
-      <time datetime="2016-02-07T15:16:31.000Z" itemprop="datePublished">2016-02-07</time>
+      <a href="/2018/06/15/mac下php正则匹配中文乱码/" class="article-date">
+      <time datetime="2018-06-15T02:46:32.000Z" itemprop="datePublished">2018-06-15</time>
 </a>
     </div>
   
@@ -198,7 +198,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      mysql的create table as 与 like 的区别
+      mac下php正则匹配中文乱码
     </h1>
   
 
@@ -213,7 +213,7 @@
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/">mysql</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php/">php</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -223,23 +223,16 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p>对于mysql的复制相同表结构方法，有create table as 和create table like 两种，区别是什么呢？</p>
-<p><em>as</em></p>
-<pre><code>create table t2 as select * from t1 where 1=2; 或者 limit 0;
-</code></pre><blockquote>
-<p>as 创建出来的t2表（新表）缺少t1表（源表）的索引信息，只有表结构相同，没有索引，但包含源表的数据。</p>
-</blockquote>
-<a id="more"></a>
-<p><em>like</em></p>
-<pre><code>create table t2 like t1;
-</code></pre><blockquote>
-<p>like 创建出来的新表包含源表的完整表结构和索引信息，不包含源表的数据。</p>
-</blockquote>
-<p>二者用途：</p>
+        <p>这个问题遇到了两次，最近一次是一个页面在返回数据的时候<code>json_encode()</code>返回false，但是测试环境又是正常的，只有本地出现，猜想是否是数据中有乱码出现导致，在本地把数据打印出来，发现数据中有部分中文出现了乱码，此时猜测是不是数据库数据编码和本地不一致？但是检查后发现，数据库、本地代码都是UTF-8编码。排除数据源问题，那估计就是在数据处理过程中哪里出现问题，往前一步步调试，最后发现在一个正则处理后出现乱码。<br><a id="more"></a></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$content = preg_replace(<span class="string">"/\s+/"</span>, <span class="string">" "</span>, $content);</div></pre></td></tr></table></figure>
+<p>此正则是用于替换掉重复的空白符，看到这里，想起之前好像处理过类似的问题，猜测是不是和系统有关，于是开始问度娘，最后发现增加模式修正符<code>u</code>就可以了。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$content = preg_replace(<span class="string">"/\s+/u"</span>, <span class="string">" "</span>, $content);</div></pre></td></tr></table></figure>
+<p>根据资料，是这么说：</p>
 <blockquote>
-<p>as用来创建相同表结构并复制源表数据<br>like用来创建完整表结构和全部索引</p>
+<p>u（PCRE_UTF8）</p>
+<p>此修正符启用了一个 PCRE 中与 Perl 不兼容的额外功能。模式字符串被当成 UTF-8。本修正符在 Unix 下自 PHP 4.1.0 起可用，在 win32 下自 PHP 4.2.3 起可用。自 PHP 4.3.5 起开始检查模式的 UTF-8 合法性。</p>
 </blockquote>
-<p><strong>PS：oracle支持as，也是只有表结构没有索引；oracle不支持like。</strong></p>
+<p>或许是因为平台差异，在mac下字符串匹配出现了问题，而centos这类系统正常。所以加上修正符使得字符串按UTF-8格式去匹配。</p>
 
       
       
@@ -249,13 +242,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2016/02/07/mysql的create-table-as-与-like-的区别/">mysql的create table as 与 like 的区别</a></p>
+        <p><span>本文标题:</span><a href="/2018/06/15/mac下php正则匹配中文乱码/">mac下php正则匹配中文乱码</a></p>
         <p><span>文章作者:</span><a href="/" title="访问 Turtle 的个人博客">Turtle</a></p>
-        <p><span>发布时间:</span>2016年02月07日 - 23时16分</p>
-        <p><span>最后更新:</span>2016年02月25日 - 23时57分</p>
+        <p><span>发布时间:</span>2018年06月15日 - 10时46分</p>
+        <p><span>最后更新:</span>2018年06月15日 - 11时09分</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2016/02/07/mysql的create-table-as-与-like-的区别/" title="mysql的create table as 与 like 的区别">http://www.newblash.me/2016/02/07/mysql的create-table-as-与-like-的区别/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://www.newblash.me/2016/02/07/mysql的create-table-as-与-like-的区别/　　作者: Turtle" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2018/06/15/mac下php正则匹配中文乱码/" title="mac下php正则匹配中文乱码">http://www.newblash.me/2018/06/15/mac下php正则匹配中文乱码/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://www.newblash.me/2018/06/15/mac下php正则匹配中文乱码/　　作者: Turtle" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script src="/js/clipboard.min.js"></script>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
@@ -268,18 +261,9 @@
 
 <nav id="article-nav">
   
-    <a href="/2016/02/08/mysql的一些常用语句/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          mysql的一些常用语句
-        
-      </div>
-    </a>
   
-  
-    <a href="/2016/02/07/LAMP环境搭建-php安装/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">[LAMP环境搭建] php安装</div>
+    <a href="/2018/05/31/document.cookie使用/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">document.cookie使用</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -329,13 +313,11 @@
 
 <div class="scroll" id="post-nav-button">
     
-    <a href="/2016/02/08/mysql的一些常用语句/" title="上一篇: mysql的一些常用语句">
-        <i class="fa fa-angle-left"></i>
-    </a>
+    <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
     
     <a title="文章目录"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
     
-    <a href="/2016/02/07/LAMP环境搭建-php安装/" title="下一篇: [LAMP环境搭建] php安装">
+    <a href="/2018/05/31/document.cookie使用/" title="下一篇: document.cookie使用">
         <i class="fa fa-angle-right"></i>
     </a>
     
