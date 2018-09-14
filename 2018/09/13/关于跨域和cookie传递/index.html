@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>关于跨域和cookie传递 | I am Turtle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="起源是一个朋友在微信群里提的一个问题：  跨域请求服务端要怎么改请求头才能获取服务端给过的cookie？">
+<meta name="keywords" content="js,php">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于跨域和cookie传递">
+<meta property="og:url" content="http://www.newblash.me/2018/09/13/关于跨域和cookie传递/index.html">
+<meta property="og:site_name" content="I am Turtle">
+<meta property="og:description" content="起源是一个朋友在微信群里提的一个问题：  跨域请求服务端要怎么改请求头才能获取服务端给过的cookie？">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://github.com/Turtle1991/images/blob/master/%E5%85%B3%E4%BA%8E%E8%B7%A8%E5%9F%9F%E5%92%8Ccookie%E4%BC%A0%E9%80%92/1.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Turtle1991/images/blob/master/%E5%85%B3%E4%BA%8E%E8%B7%A8%E5%9F%9F%E5%92%8Ccookie%E4%BC%A0%E9%80%92/3.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Turtle1991/images/blob/master/%E5%85%B3%E4%BA%8E%E8%B7%A8%E5%9F%9F%E5%92%8Ccookie%E4%BC%A0%E9%80%92/2.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Turtle1991/images/blob/master/%E5%85%B3%E4%BA%8E%E8%B7%A8%E5%9F%9F%E5%92%8Ccookie%E4%BC%A0%E9%80%92/4.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Turtle1991/images/blob/master/%E5%85%B3%E4%BA%8E%E8%B7%A8%E5%9F%9F%E5%92%8Ccookie%E4%BC%A0%E9%80%92/5.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Turtle1991/images/blob/master/%E5%85%B3%E4%BA%8E%E8%B7%A8%E5%9F%9F%E5%92%8Ccookie%E4%BC%A0%E9%80%92/8.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Turtle1991/images/blob/master/%E5%85%B3%E4%BA%8E%E8%B7%A8%E5%9F%9F%E5%92%8Ccookie%E4%BC%A0%E9%80%92/9.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Turtle1991/images/blob/master/%E5%85%B3%E4%BA%8E%E8%B7%A8%E5%9F%9F%E5%92%8Ccookie%E4%BC%A0%E9%80%92/10.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Turtle1991/images/blob/master/%E5%85%B3%E4%BA%8E%E8%B7%A8%E5%9F%9F%E5%92%8Ccookie%E4%BC%A0%E9%80%92/7.jpg?raw=true">
+<meta property="og:updated_time" content="2018-09-14T06:52:06.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于跨域和cookie传递">
+<meta name="twitter:description" content="起源是一个朋友在微信群里提的一个问题：  跨域请求服务端要怎么改请求头才能获取服务端给过的cookie？">
+<meta name="twitter:image" content="https://github.com/Turtle1991/images/blob/master/%E5%85%B3%E4%BA%8E%E8%B7%A8%E5%9F%9F%E5%92%8Ccookie%E4%BC%A0%E9%80%92/1.jpg?raw=true">
+  
+  
+    <link rel="icon" href="/img/favicon.png">
+  
+  
+      <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  
+      <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+  <!-- 加载特效 -->
+    <script src="/js/pace.js"></script>
+    <link href="/css/pace/pace-theme-flash.css" rel="stylesheet" />
+  <script>
+      var yiliaConfig = {
+          rootUrl: '/',
+          fancybox: true,
+          animate: true,
+          isHome: false,
+          isPost: true,
+          isArchive: false,
+          isTag: false,
+          isCategory: false,
+          open_in_new: false
+      }
+  </script>
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            
+            <img lazy-src="/img/head.png" class="js-avatar">
+            
+        </a>
+
+        <hgroup>
+          <h1 class="header-author"><a href="/" title="Hi Mate">Turtle</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">别让等待，成为遗憾</p>
+        
+        
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">博客首页</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fl github" target="_blank" href="https://github.com/Turtle1991" title="github">github</a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <a href="/tags/Cassandra/" style="font-size: 10px;">Cassandra</a> <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/js/" style="font-size: 15px;">js</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/mysql/" style="font-size: 20px;">mysql</a> <a href="/tags/php/" style="font-size: 15px;">php</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/配环境/" style="font-size: 20px;">配环境</a>
+                    </div>
+                </section>
+                
+                
+                
+
+                
+                
+                <section class="switch-part switch-part3">
+                
+                    <div id="js-aboutme">爱编程，php，喜欢动漫</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="Me">Turtle</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                
+                    <img lazy-src="/img/head.png" class="js-avatar">
+                
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="Me">Turtle</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">别让等待，成为遗憾</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">博客首页</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a class="github" target="_blank" href="https://github.com/Turtle1991" title="github">github</a>
+                    
+                </div>
+            </nav>
+        </header>                
+    </div>
+</nav>
+      <div class="body-wrap"><article id="post-关于跨域和cookie传递" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/09/13/关于跨域和cookie传递/" class="article-date">
+      <time datetime="2018-09-13T12:46:57.000Z" itemprop="datePublished">2018-09-13</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      关于跨域和cookie传递
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/码日子/">码日子</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php/">php</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>起源是一个朋友在微信群里提的一个问题：</p>
+<blockquote>
+<p>跨域请求服务端要怎么改请求头才能获取服务端给过的cookie？<br><a id="more"></a></p>
+</blockquote>
+<p>当时看后两个想法：</p>
+<blockquote>
+<p>1.跨域，这个东西一直听大家说，自己也只碰到过一次，是做一个项目的时候，有个flash插件中请求出现跨域，那时候解决方案是修改crossdomain.xml配置文件，需要在服务器上作修改。所以后来对跨域的认识也只限于此。</p>
+<p>2.怎么设置请求头来获取跨域请求的cookie呢？</p>
+</blockquote>
+<p>所以，决定好好看看这个问题该怎么解决，还有学习下跨域。</p>
+<h1 id="什么是跨域？"><a href="#什么是跨域？" class="headerlink" title="什么是跨域？"></a>什么是跨域？</h1><p>我们在t1.c1.com的域名下的js是不能调用t1.c2.com下的js、对象或者数据，因为t1.c1.com和t1.c2.com是两个不同的域。如果调用那么就会出现<code>跨域</code>。</p>
+<p>那么同域是指什么呢？简单来说就是 <code>域名相同、端口相同、协议相同</code>。</p>
+<p>浏览器对于javascript有同源策略限制，同源策略即我们请求的url地址，必须与浏览器上的url地址处于同域上（域名、端口、协议相同）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">客户端url: http://t1.c1.com/test/a.html</div><div class="line"></div><div class="line">请求地址：</div><div class="line"></div><div class="line">http://t1.c1.com/test/b.html		同域名同目录下，成功</div><div class="line">http://t1.c1.com/learn/a.html		同域名不同目录，成功</div><div class="line">http://t1.c2.com/test/b.html		不同域名同目录，跨域</div><div class="line">http://t1.c1.com:88/test/b.html		同域名不同端口，跨域</div><div class="line">https://t1.c1.com/test/b.html		同域名不同协议，跨域</div></pre></td></tr></table></figure>
+<p>凡是拥有src这个属性的标签都可以跨域，如<code>&lt;script&gt; &lt;img&gt; &lt;iframe&gt;</code>等，所以我们在调用js文件的时候不受跨域影响。</p>
+<h1 id="复现问题"><a href="#复现问题" class="headerlink" title="复现问题"></a>复现问题</h1><p>为了复现跨域，通过nginx在本地配置了两个虚拟域名<code>t1.c1.com</code>和<code>t1.c2.com</code>。</p>
+<p>客户端 c1.php</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"../js/jquery.min.1.7.2.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"content-type"</span> <span class="attr">content</span>=<span class="string">"text/html;charset=utf-8"</span>/&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">button</span>&gt;</span>跨域测试<span class="tag">&lt;/<span class="name">button</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></div><div class="line"><span class="undefined"></span></div><div class="line"><span class="undefined">    $('button').click(function () &#123;</span></div><div class="line"><span class="undefined">        $.post('http://t1.c2.com/c2.php', &#123;&#125;, function (o) &#123;</span></div><div class="line"><span class="undefined">            console.log(o);</span></div><div class="line"><span class="undefined">        &#125;, 'json');</span></div><div class="line"><span class="undefined">    &#125;);</span></div><div class="line"><span class="undefined"></span></div><div class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>服务端 c2.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">setcookie(<span class="string">'Turtle'</span>, <span class="string">'turtle'</span>, <span class="number">-1</span>, <span class="string">'/'</span>);</div><div class="line">$ret = [</div><div class="line">    <span class="string">'cookie'</span> =&gt; <span class="keyword">isset</span>($_COOKIE[<span class="string">'Turtle'</span>]) ? $_COOKIE[<span class="string">'Turtle'</span>] : <span class="string">''</span>,</div><div class="line">];</div><div class="line"></div><div class="line"><span class="keyword">echo</span> json_encode($ret);</div></pre></td></tr></table></figure>
+<p>客户端发起请求，结果报错了，错误信息表明当前请求跨域了</p>
+<p><img src="https://github.com/Turtle1991/images/blob/master/%E5%85%B3%E4%BA%8E%E8%B7%A8%E5%9F%9F%E5%92%8Ccookie%E4%BC%A0%E9%80%92/1.jpg?raw=true" alt="image"></p>
+<p>跨域的解决方案有多种（jsonp、flash、iframe、CORS等）。我们这里就用CORS来解决。</p>
+<p>CORS: （跨域资源共享，Cross-Origin Resource Sharing）</p>
+<p>服务端修改：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">header(<span class="string">"ACCESS-CONTROL-ALLOW-ORIGIN:http://t1.c1.com"</span>);</div><div class="line">header(<span class="string">'Access-Control-Allow-Methods:POST'</span>);</div><div class="line">header(<span class="string">'Access-Control-Allow-Headers:x-requested-with,content-type'</span>);</div><div class="line">header(<span class="string">'content-type:application/json'</span>);</div><div class="line"></div><div class="line">setcookie(<span class="string">'Turtle'</span>, <span class="string">'turtle'</span>, <span class="number">-1</span>, <span class="string">'/'</span>);</div><div class="line">$ret = [</div><div class="line">    <span class="string">'cookie'</span> =&gt; <span class="keyword">isset</span>($_COOKIE[<span class="string">'Turtle'</span>]) ? $_COOKIE[<span class="string">'Turtle'</span>] : <span class="string">''</span>,</div><div class="line">];</div><div class="line"></div><div class="line"><span class="keyword">echo</span> json_encode($ret);</div></pre></td></tr></table></figure>
+<p>增加了一些header的设置，主要是<code>header(&quot;ACCESS-CONTROL-ALLOW-ORIGIN:http://t1.c1.com&quot;);</code>这一行，允许了来自<code>http://t1.c1.com</code>域的请求。这里支持通配符<code>*</code>，如果采用了通配符，那就表示允许所有的跨域请求。</p>
+<p>再次请求服务端，不报跨域了。但是！我们并没有拿到服务端设置的cookie，去服务端的域下看，也看不到设置了该cookie，什么cookie都木有。</p>
+<p><img src="https://github.com/Turtle1991/images/blob/master/%E5%85%B3%E4%BA%8E%E8%B7%A8%E5%9F%9F%E5%92%8Ccookie%E4%BC%A0%E9%80%92/3.jpg?raw=true" alt="image"></p>
+<p><img src="https://github.com/Turtle1991/images/blob/master/%E5%85%B3%E4%BA%8E%E8%B7%A8%E5%9F%9F%E5%92%8Ccookie%E4%BC%A0%E9%80%92/2.jpg?raw=true" alt="image"></p>
+<h1 id="跨域请求中获取服务端域下的cookie"><a href="#跨域请求中获取服务端域下的cookie" class="headerlink" title="跨域请求中获取服务端域下的cookie"></a>跨域请求中获取服务端域下的cookie</h1><p>所以就复现了开头提到了那个问题，要怎么设置才能使得跨域请求能获取到服务端给的cookie。查找资料，看到header可以设置这样一个参数<code>Access-Control-Allow-Credentials</code>。</p>
+<blockquote>
+<p>Access-Control-Allow-Credentials: 是否允许请求带有验证信息</p>
+<p>当服务端设置这个参数后，客户端ajax请求需要设置<code>withCredentials</code>为<code>true</code></p>
+<p>这样就能够传递cookie信息</p>
+</blockquote>
+<p>客户端修改：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"../js/jquery.min.1.7.2.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"content-type"</span> <span class="attr">content</span>=<span class="string">"text/html;charset=utf-8"</span>/&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">button</span>&gt;</span>跨域测试<span class="tag">&lt;/<span class="name">button</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></div><div class="line"><span class="undefined">	</span></div><div class="line"><span class="undefined">    $.ajaxSetup(&#123;crossDomain: true, xhrFields: &#123;withCredentials: true&#125;&#125;); //设置ajax请求的默认值</span></div><div class="line"><span class="undefined"></span></div><div class="line"><span class="undefined">    $('button').click(function () &#123;</span></div><div class="line"><span class="undefined">        $.post('http://t1.c2.com/c2.php', &#123;&#125;, function (o) &#123;</span></div><div class="line"><span class="undefined">            console.log(o);</span></div><div class="line"><span class="undefined">        &#125;, 'json');</span></div><div class="line"><span class="undefined">    &#125;);</span></div><div class="line"><span class="undefined"></span></div><div class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">header(<span class="string">"ACCESS-CONTROL-ALLOW-ORIGIN:http://t1.c1.com"</span>);</div><div class="line">header(<span class="string">"Access-Control-Allow-Credentials:true"</span>);</div><div class="line">header(<span class="string">'Access-Control-Allow-Methods:POST'</span>);</div><div class="line">header(<span class="string">'Access-Control-Allow-Headers:x-requested-with,content-type'</span>);</div><div class="line">header(<span class="string">'content-type:application/json'</span>);</div><div class="line"></div><div class="line">setcookie(<span class="string">'Turtle'</span>, <span class="string">'turtle'</span>, <span class="number">-1</span>, <span class="string">'/'</span>);</div><div class="line">$ret = [</div><div class="line">    <span class="string">'cookie'</span> =&gt; <span class="keyword">isset</span>($_COOKIE[<span class="string">'Turtle'</span>]) ? $_COOKIE[<span class="string">'Turtle'</span>] : <span class="string">''</span>,</div><div class="line">];</div><div class="line"></div><div class="line"><span class="keyword">echo</span> json_encode($ret);</div></pre></td></tr></table></figure>
+<p>客户端发起请求，可以看到<code>t1.c2.com</code>域下成功设置了cookie，同时也有返回给客户端cookie值。不过这里注意到第一次请求的时候返回的值是空，我的猜想是请求回来的时候，浏览器还没完成该cookie的设置，所以暂时是空，下一次再请求，该值已经设置成功，所以就有返回值了。</p>
+<p>所以如果是用于登录的话，是否可以在登录成功后加一个中转页面，这样跳转之后就能正常使用登录成功的cookie值。</p>
+<p><img src="https://github.com/Turtle1991/images/blob/master/%E5%85%B3%E4%BA%8E%E8%B7%A8%E5%9F%9F%E5%92%8Ccookie%E4%BC%A0%E9%80%92/4.jpg?raw=true" alt="image"></p>
+<p><img src="https://github.com/Turtle1991/images/blob/master/%E5%85%B3%E4%BA%8E%E8%B7%A8%E5%9F%9F%E5%92%8Ccookie%E4%BC%A0%E9%80%92/5.jpg?raw=true" alt="image"></p>
+<h1 id="跨域请求中把cookie传递给服务端"><a href="#跨域请求中把cookie传递给服务端" class="headerlink" title="跨域请求中把cookie传递给服务端"></a>跨域请求中把cookie传递给服务端</h1><p>完成了获取服务端的cookie，这时突然想到，如果我要在跨域请求的时候把客户端的cookie传递给服务端呢？是不是现在也可以成功传递？</p>
+<p>客户端修改：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">setcookie(<span class="string">"FromC1"</span>, <span class="string">"c1"</span>, <span class="number">-1</span>, <span class="string">'/'</span>); <span class="comment">//在这里设置客户端cookie,默认当前属于当前域</span></div><div class="line"><span class="meta">?&gt;</span></div><div class="line">&lt;html&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;script type=<span class="string">"text/javascript"</span> src=<span class="string">"../js/jquery.min.1.7.2.js"</span>&gt;&lt;/script&gt;</div><div class="line">    &lt;meta http-equiv=<span class="string">"content-type"</span> content=<span class="string">"text/html;charset=utf-8"</span>/&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;button&gt;跨域测试&lt;/button&gt;</div><div class="line">&lt;/body&gt;</div><div class="line"></div><div class="line">&lt;/html&gt;</div><div class="line"></div><div class="line">&lt;script&gt;</div><div class="line"></div><div class="line">    $.ajaxSetup(&#123;crossDomain: <span class="keyword">true</span>, xhrFields: &#123;withCredentials: <span class="keyword">true</span>&#125;&#125;);</div><div class="line"></div><div class="line">    $(<span class="string">'button'</span>).click(<span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;</div><div class="line">        $.post(<span class="string">'http://t1.c2.com/c2.php'</span>, &#123;&#125;, <span class="function"><span class="keyword">function</span> <span class="params">(o)</span> </span>&#123;</div><div class="line">            console.log(o);</div><div class="line">        &#125;, <span class="string">'json'</span>);</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<p>服务端修改：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">header(<span class="string">"ACCESS-CONTROL-ALLOW-ORIGIN:http://t1.c1.com"</span>);</div><div class="line">header(<span class="string">"Access-Control-Allow-Credentials:true"</span>);</div><div class="line">header(<span class="string">'Access-Control-Allow-Methods:POST'</span>);</div><div class="line">header(<span class="string">'Access-Control-Allow-Headers:x-requested-with,content-type'</span>);</div><div class="line">header(<span class="string">'content-type:application/json'</span>);</div><div class="line"></div><div class="line">setcookie(<span class="string">'Turtle'</span>, <span class="string">'turtle'</span>, <span class="number">-1</span>, <span class="string">'/'</span>);</div><div class="line"></div><div class="line">$ret = [</div><div class="line">    <span class="string">'cookie'</span> =&gt; <span class="keyword">isset</span>($_COOKIE[<span class="string">'Turtle'</span>]) ? $_COOKIE[<span class="string">'Turtle'</span>] : <span class="string">''</span>,</div><div class="line">    <span class="string">'client_cookie'</span> =&gt; <span class="keyword">isset</span>($_COOKIE[<span class="string">'FromC1'</span>]) ? $_COOKIE[<span class="string">'FromC1'</span>] : <span class="string">''</span>,</div><div class="line">];</div><div class="line"></div><div class="line"><span class="keyword">echo</span> json_encode($ret);</div></pre></td></tr></table></figure>
+<p>客户端请求结果：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;<span class="attr">cookie</span>: <span class="string">"turtle"</span>, <span class="attr">client_cookie</span>: <span class="string">""</span>&#125;</div></pre></td></tr></table></figure>
+<p>此时客户端已经有设下cookie了，但是并没有传递过去。查资料，大部分也是说设置好<code>Access-Control-Allow-Credentials</code>和<code>{crossDomain: true, xhrFields: {withCredentials: true}}</code>就可以了。</p>
+<p>最后看到这样一个说法：</p>
+<blockquote>
+<p>要传递的cookie的域必须是两个域名的顶级域名，才能被双方认可。如果网站A是<code>a.test.cn</code>，网站B是<code>b.test.com</code>，那么无论如何都不能实现A携带会话cookie发送ajax请求到网站B上（B端设置了Access-Control-Allow-Origin=”test.cn”，设置为*的情况没做考究）</p>
+</blockquote>
+<p>看了下，我这里客户端域是<code>t1.c1.com</code>，服务端域是<code>t1.c2.com</code><br>再看客户端cookie，之前设置是取默认值，所以cookie的域是<code>t1.c1.com</code>，所以这样的话就不会被传递到服务端了。</p>
+<p>所以重新配置域名，<code>t1.c2.com</code> 更改为 <code>t2.c1.com</code>。</p>
+<p>客户端修改：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">setcookie(<span class="string">"FromC1"</span>, <span class="string">"c1"</span>, <span class="number">-1</span>, <span class="string">'/'</span>); <span class="comment">//在这里设置客户端cookie,默认当前属于当前域</span></div><div class="line"><span class="meta">?&gt;</span></div><div class="line">&lt;html&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;script type=<span class="string">"text/javascript"</span> src=<span class="string">"../js/jquery.min.1.7.2.js"</span>&gt;&lt;/script&gt;</div><div class="line">    &lt;meta http-equiv=<span class="string">"content-type"</span> content=<span class="string">"text/html;charset=utf-8"</span>/&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;button&gt;跨域测试&lt;/button&gt;</div><div class="line">&lt;/body&gt;</div><div class="line"></div><div class="line">&lt;/html&gt;</div><div class="line"></div><div class="line">&lt;script&gt;</div><div class="line"></div><div class="line">    $.ajaxSetup(&#123;crossDomain: <span class="keyword">true</span>, xhrFields: &#123;withCredentials: <span class="keyword">true</span>&#125;&#125;);</div><div class="line"></div><div class="line">    $(<span class="string">'button'</span>).click(<span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;</div><div class="line">        $.post(<span class="string">'http://t2.c1.com/c2.php'</span>, &#123;&#125;, <span class="function"><span class="keyword">function</span> <span class="params">(o)</span> </span>&#123;</div><div class="line">            console.log(o);</div><div class="line">        &#125;, <span class="string">'json'</span>);</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<p>发起请求，我们共发起了两次请求，结果如下：</p>
+<p><img src="https://github.com/Turtle1991/images/blob/master/%E5%85%B3%E4%BA%8E%E8%B7%A8%E5%9F%9F%E5%92%8Ccookie%E4%BC%A0%E9%80%92/8.jpg?raw=true" alt="image"></p>
+<p>控制台结果打印：</p>
+<p><code>{cookie: &quot;&quot;, client_cookie: &quot;&quot;}</code></p>
+<p>可以看到在响应头里面有显示<code>Set-Cookie</code>，我猜想之前的例子中不显示，可能是因为两个域是不同的顶级域导致。现在两个域的顶级域都是<code>c1.com</code>，所以互相认同。</p>
+<p><img src="https://github.com/Turtle1991/images/blob/master/%E5%85%B3%E4%BA%8E%E8%B7%A8%E5%9F%9F%E5%92%8Ccookie%E4%BC%A0%E9%80%92/9.jpg?raw=true" alt="image"></p>
+<p>控制台结果打印：</p>
+<p><code>{cookie: &quot;turtle&quot;, client_cookie: &quot;&quot;}</code></p>
+<p>可以看到第二次请求后在请求头部里带有了<code>Cookie</code>，该cookie刚好是之前请求服务端（<code>http://t2.c1.com</code>）后设置的cookie，在之前的例子中这里也是没有显示的，现在有了，我觉得也是和两个域现在是同一个顶级域有关系，它们互相认同，所以这里在请求头中显示出来了。但是会发现我们仍旧没有把客户端的cookie传递过去。查看客户端设置的cookie，由于没有指定域，所以默认是属于<code>t1.c1.com</code>，按上面的说法，需要改变cookie的域为和服务端（t2.c1.com）相同的顶级域c1.com。所以在客户端设置cookie的时候指定域为<code>c1.com</code>。</p>
+<p>客户端修改：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"></div><div class="line">setcookie(<span class="string">"FromC1"</span>, <span class="string">"c1"</span>, <span class="number">-1</span>, <span class="string">'/'</span>, <span class="string">'c1.com'</span>); <span class="comment">//指定cookie的域</span></div></pre></td></tr></table></figure>
+<p>重新请求，结果如下：</p>
+<p><img src="https://github.com/Turtle1991/images/blob/master/%E5%85%B3%E4%BA%8E%E8%B7%A8%E5%9F%9F%E5%92%8Ccookie%E4%BC%A0%E9%80%92/10.jpg?raw=true" alt="image"></p>
+<p>可以看到客户端在请求中把cookie传过去给服务端了，实现了cookie的共享。到这里，就解决了开头提出的那个问题了。</p>
+<h1 id="抓包工具抓包"><a href="#抓包工具抓包" class="headerlink" title="抓包工具抓包"></a>抓包工具抓包</h1><p>如果利用抓包工具Charles抓包，发现可以清楚看到响应头里面是有显示<code>Set-Cookie</code>的，但是在chrome的调试中network里面并没有显示（此时两个域名是<code>t1.c1.com</code>和<code>t1.c2.com</code>，还是不同顶级域的情况）。所以猜想可能是浏览器的策略导致其不显示，有必要的时候还是可以使用抓包工具辅助测试。</p>
+<p><img src="https://github.com/Turtle1991/images/blob/master/%E5%85%B3%E4%BA%8E%E8%B7%A8%E5%9F%9F%E5%92%8Ccookie%E4%BC%A0%E9%80%92/7.jpg?raw=true" alt="image"></p>
+<h1 id="一些观点"><a href="#一些观点" class="headerlink" title="一些观点"></a>一些观点</h1><p>1.如果程序猿偷懒将Access-Control-Allow-Origin设置为：Access-Control-Allow-Origin: * 允许任何来自任意域的跨域请求，那么就存在被DDoS攻击的可能</p>
+<p>2.服务端header设置Access-Control-Allow-Credentials:true后，Access-Control-Allow-Origin不可以设为*，必须设置为一个域名，否则会返回错误</p>
+<p>3.关于cookie的domain，这要求cookie的域必须是两个子域的顶级域，才能被双方认可。如果网站A是：a.test.cn，网站B是：b.test.com，那么无论如何都不能实现A携带会话cookie发送ajax请求到网站B上（B端设置了Access-Control-Allow-Origin=”test.cn”，设置为 *的情况没做考究）</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a href="https://www.cnblogs.com/chenshishuo/p/4919224.html" target="_blank" rel="external">关于跨域,以及跨域的几种方式</a></p>
+<p><a href="https://segmentfault.com/q/1010000002487077" target="_blank" rel="external">PHP 如何操作跨域的COOKIE，不同服务器上</a></p>
+<p><a href="http://www.php.cn/php-weizijiaocheng-384375.html" target="_blank" rel="external">Ajax跨域访问Cookie丢失问题的解决方法_AJAX相关</a></p>
+<p><a href="https://blog.csdn.net/qq_29845761/article/details/51897705" target="_blank" rel="external">ajax跨域请求及传递cookie</a></p>
+<p><a href="https://www.cnblogs.com/shikyoh/p/4959562.html" target="_blank" rel="external">跨域的另一种解决方案——CORS（Cross-Origin Resource Sharing）跨域资源共享</a></p>
+
+      
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/09/13/关于跨域和cookie传递/">关于跨域和cookie传递</a></p>
+        <p><span>文章作者:</span><a href="/" title="访问 Turtle 的个人博客">Turtle</a></p>
+        <p><span>发布时间:</span>2018年09月13日 - 20时46分</p>
+        <p><span>最后更新:</span>2018年09月14日 - 14时52分</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/09/13/关于跨域和cookie传递/" title="关于跨域和cookie传递">http://www.newblash.me/2018/09/13/关于跨域和cookie传递/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://www.newblash.me/2018/09/13/关于跨域和cookie传递/　　作者: Turtle" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script src="/js/clipboard.min.js"></script>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" title="中国大陆 (CC BY-NC-SA 3.0 CN)" target = "_blank">"署名-非商用-相同方式共享 3.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+<nav id="article-nav">
+  
+  
+    <a href="/2018/06/15/mac下php正则匹配中文乱码/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">mac下php正则匹配中文乱码</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#什么是跨域？"><span class="toc-number">1.</span> <span class="toc-text">什么是跨域？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#复现问题"><span class="toc-number">2.</span> <span class="toc-text">复现问题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#跨域请求中获取服务端域下的cookie"><span class="toc-number">3.</span> <span class="toc-text">跨域请求中获取服务端域下的cookie</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#跨域请求中把cookie传递给服务端"><span class="toc-number">4.</span> <span class="toc-text">跨域请求中把cookie传递给服务端</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#抓包工具抓包"><span class="toc-number">5.</span> <span class="toc-text">抓包工具抓包</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#一些观点"><span class="toc-number">6.</span> <span class="toc-text">一些观点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考资料"><span class="toc-number">7.</span> <span class="toc-text">参考资料</span></a></li></ol>
+</div>
+<!--<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">-->
+
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script>
+    var valueHide = "隐藏目录";
+    var valueShow = "显示目录";
+
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+        }
+    })
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+    }
+</script>
+
+
+
+
+
+
+
+    
+
+
+
+<div class="scroll" id="post-nav-button">
+    
+    <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+    
+    <a title="文章目录"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+    
+    <a href="/2018/06/15/mac下php正则匹配中文乱码/" title="下一篇: mac下php正则匹配中文乱码">
+        <i class="fa fa-angle-right"></i>
+    </a>
+    
+</div>
+<ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/09/13/关于跨域和cookie传递/">关于跨域和cookie传递</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/15/mac下php正则匹配中文乱码/">mac下php正则匹配中文乱码</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/31/document.cookie使用/">document.cookie使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/30/mysql加了索引就一定会用到吗？/">mysql加了索引就一定会用到吗？</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/13/高精度运算学习/">高精度运算学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/11/Cassandra安装/">Cassandra安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/17/开发环境搭建/">mac下php开发环境搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/25/js收获小笔记/">js收获小笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/08/mysql的一些常用语句/">mysql的一些常用语句</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/07/mysql的create-table-as-与-like-的区别/">mysql的create table as 与 like 的区别</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/07/LAMP环境搭建-php安装/">[LAMP环境搭建] php安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/07/LAMP环境搭建-MySQL安装/">[LAMP环境搭建] MySQL安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/01/27/LAMP环境搭建-Apache安装/">[LAMP环境搭建] Apache安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/01/23/开篇/">开篇</a></li></ul>
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script>
+    $(".post-list").addClass("toc-article");
+    $(".post-list-item a").attr("target", "_blank");
+    $("#post-nav-button > a:nth-child(2)").click(function () {
+
+        if ($(".toc").length < 1) {
+            //无目录
+
+        } else {
+            //有目录
+            $(".fa-bars, .fa-times").toggle();
+            if ($("#toc").is(":hidden")) {
+                //显示
+                $("#tocButton").attr("value", valueHide);
+                $("#toc").slideDown(320);
+            } else {
+                //隐藏
+                $("#tocButton").attr("value", valueShow);
+                $("#toc").slideUp(350);
+            }
+        }
+
+//        $(".fa-bars, .fa-times").toggle();
+//        $(".post-list").toggle(300);
+//        if ($(".toc").length > 0) {
+//            $("#toc, #tocButton").toggle(200, function () {
+//                if ($(".switch-area").is(":visible")) {
+//                    $("#tocButton").attr("value", valueHide);
+//                }
+//            })
+//        }
+//        else {
+//        }
+    })
+
+    $(document).ready(function () {
+        if ($("#toc").is(":hidden") === false) {
+            $(".fa-bars, .fa-times").toggle();
+        }
+    });
+</script>
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                &copy; 2018 Turtle
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/luuman/hexo-theme-spfk" target="_blank">spfk</a> by luuman
+            </div>
+        </div>
+        
+    </div>
+</footer>
+
+    </div>
+    <script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var backgroundnum = 24;
+            var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+            $("#mobile-nav").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+            $(".left-col").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    $(document).ready(function() {
+        if ($("#comments").length < 1) {
+            $("#scroll > a:nth-child(2)").hide();
+        };
+    })
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+  <script language="javascript">
+    $(function() {
+        $("a[title]").each(function() {
+            var a = $(this);
+            var title = a.attr('title');
+            if (title == undefined || title == "") return;
+            a.data('title', title).removeAttr('title').hover(
+
+            function() {
+                var offset = a.offset();
+                $("<div id=\"anchortitlecontainer\"></div>").appendTo($("body")).html(title).css({
+                    top: offset.top - a.outerHeight() - 15,
+                    left: offset.left + a.outerWidth()/2 + 1
+                }).fadeIn(function() {
+                    var pop = $(this);
+                    setTimeout(function() {
+                        pop.remove();
+                    }, pop.text().length * 800);
+                });
+            }, function() {
+                $("#anchortitlecontainer").remove();
+            });
+        });
+    });
+</script>
+
+
+  </div>
+</body>
+</html>
